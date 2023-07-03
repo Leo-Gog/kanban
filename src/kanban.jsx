@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./kanbanStyle.css";
 import useLocalStorage from "./hooks/useLocalStorage";
 import useWindowResize from "./hooks/useWindowResize";
+import Board from "./Components/kanbanBoard";
 
 const Kanban = () => {
   const [boards, setBoards] = useState([
@@ -12,13 +13,10 @@ const Kanban = () => {
 
   const [currentBoard, setCurrentBoard] = useState(null)
   const [currentItem, setCurrentItem] = useState(null)
-  
+  const [newItemTitles, setNewItemTitles] = useState({1: "", 2: "", 3: ""})
+
   const [theme, setTheme] = useLocalStorage("theme", true)
   const width = useWindowResize()
-
-  const resize = () => width <= 576 ?  false : true
-
-  const [newItemTitles, setNewItemTitles] = useState({1: "", 2: "", 3: ""})
 
   const dragOverHandler = (e) => {
     e.preventDefault()
@@ -68,6 +66,7 @@ const Kanban = () => {
     }
   }
 
+
   const handleNewItemChange = (e, board) => {
     const { value } = e.target
 
@@ -93,47 +92,21 @@ const Kanban = () => {
   const toggleDarkMode = () => {
     setTheme(!theme)
   }
- const toggel = `${resize() && theme && 'dark-mode'}`
+
+  const toggel = `${(width <= 576 ?  false : true) && theme && 'dark-mode'}`
+  const hendlers = [handleNewItemChange, handleAddItem, dragOverHandler, dropHandler, dragLeaveHandler, dragStartHandler, dragEndHandler]
 return (
   <>
     <button onClick={() => toggleDarkMode() } className="switch-btn">Switch mode</button>
     <div className="kanban">
         {boards.map((board) => (
-          <div
+          <Board 
             key={board.id}
-            className={`board ${toggel}`}
-            onDragOver={(e) => dragOverHandler(e)}
-            onDrop={(e) => dropHandler(e, board)}
-          >
-            <div className={`border__title ${toggel}`}>{board.title}</div>
-            {board.items.map((item, index) => (
-              <div
-                key={item.id}
-                onDragOver={(e) => dragOverHandler(e)}
-                onDragLeave={(e) => dragLeaveHandler(e)}
-                onDragStart={(e) => dragStartHandler(e, board, item)}
-                onDragEnd={(e) => dragEndHandler(e)}
-                onDrop={(e) => dropHandler(e, board)}
-                draggable="true"
-                className={`item ${toggel}`}
-                data-index={index}
-              >
-                {item.title}
-              </div>
-            ))}
-            <div className={`item-container ${toggel}`}>
-              <input
-                type="text"
-                placeholder="Add new item"
-                value={newItemTitles[board.id]}
-                onChange={(e) => handleNewItemChange(e, board)}
-                className={`item-input ${toggel}`}
-              />
-              <button onClick={() => handleAddItem(board)} className={`add-item-button ${toggel}`}>
-                Add
-              </button>
-            </div>
-          </div>
+            board={board} 
+            toggel={toggel} 
+            hendlers={hendlers} 
+            newItemTitles={newItemTitles}
+          />
         ))}
     </div>
   </>
