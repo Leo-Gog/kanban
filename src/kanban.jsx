@@ -7,13 +7,12 @@ import Board from "./Components/kanbanBoard";
 const Kanban = () => {
   const [boards, setBoards] = useState([
     { id: 1, title: "Inbox", items: [{ id: 1, title: "task 1" }] },
-    { id: 2, title: "inProgress", items: [{ id: 7, title: "task 1, board-2" }] },
+    { id: 2, title: "In Progress", items: [{ id: 7, title: "task 1, board-2" }] },
     { id: 3, title: "Done", items: [{ id: 9, title: "task 1, board-3" }] }
   ])
 
   const [currentBoard, setCurrentBoard] = useState(null)
   const [currentItem, setCurrentItem] = useState(null)
-  const [newItemTitles, setNewItemTitles] = useState({1: "", 2: "", 3: ""})
 
   const [theme, setTheme] = useLocalStorage("theme", true)
   const width = useWindowResize()
@@ -66,35 +65,24 @@ const Kanban = () => {
     }
   }
 
+  const handleAddItem = (boardId, itemValue) => {
+    const newItem = {id: Date.now(), title: itemValue}
 
-  const handleNewItemChange = (e, board) => {
-    const { value } = e.target
-
-    const updatedNewItemTitles = { ...newItemTitles, [board.id]: value }
-    setNewItemTitles(updatedNewItemTitles)
-  };
-
-  const handleAddItem = (board) => {
-    const newItem = { id: Date.now(), title: newItemTitles[board.id] }
     const updatedBoards = boards.map((b) => {
-      if (b.id === board.id) {
+      if (b.id === boardId) {
         const updatedItems = [...b.items, newItem]
         return { ...b, items: updatedItems }
       }
       return b
     })
-    setBoards(updatedBoards);
-
-    const updatedNewItemTitles = { ...newItemTitles, [board.id]: "" }
-    setNewItemTitles(updatedNewItemTitles)
+    setBoards(updatedBoards)
   }
 
-  const toggleDarkMode = () => {
-    setTheme(!theme)
-  }
+  const toggleDarkMode = () => setTheme(!theme)
 
-  const toggel = `${(width <= 576 ?  false : true) && theme && 'dark-mode'}`
-  const hendlers = [handleNewItemChange, handleAddItem, dragOverHandler, dropHandler, dragLeaveHandler, dragStartHandler, dragEndHandler]
+  const toggel = `${!(width <= 576) && theme && 'dark-mode'}`
+  const hendlers = [handleAddItem, dragOverHandler, dropHandler, dragLeaveHandler, dragStartHandler, dragEndHandler]
+
 return (
   <>
     <button onClick={() => toggleDarkMode() } className="switch-btn">Switch mode</button>
@@ -104,8 +92,7 @@ return (
             key={board.id}
             board={board} 
             toggel={toggel} 
-            hendlers={hendlers} 
-            newItemTitles={newItemTitles}
+            hendlers={hendlers}
           />
         ))}
     </div>
