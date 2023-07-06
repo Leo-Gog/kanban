@@ -1,21 +1,41 @@
 import React, { useState } from "react";
-import "./kanbanStyle.css";
-import useLocalStorage from "./hooks/useLocalStorage";
-import useWindowResize from "./hooks/useWindowResize";
 import Board from "./Components/kanbanBoard";
+import { KanbanContainer, KanbanBoards } from "./Components/myStyledComponents";
 
 const Kanban = () => {
   const [boards, setBoards] = useState([
-    { id: 1, title: "Inbox", items: [{ id: 1, title: "task 1" }] },
-    { id: 2, title: "In Progress", items: [{ id: 7, title: "task 1, board-2" }] },
-    { id: 3, title: "Done", items: [{ id: 9, title: "task 1, board-3" }] }
+    { 
+      id: 1,
+      title: "Inbox",
+      color: "#b87b66",
+      items: [
+        { id: 1, color: "#339df5", title: "Download Android app" },
+        { id: 2, color: "#f64728", title: "Change and update account details in the iOS app" }
+      ]
+     },
+    {
+      id: 2,
+      title: "In Progress",
+      color: "#fefdab",
+      items: [
+        { id: 3, color: "#f64728", title: "Set up recurring utilites payments" },
+        { id: 4, color: "#ebc90f", title: "View transaction history by category" },
+        { id: 5, color: "#339df5", title: "Set and monitor progress on financial goals" }
+      ] 
+    },
+    {
+      id: 3,
+      title: "Done",
+      color: "#b7c9a1",
+      items: [
+        { id: 6, color: "#92d055", title: "Download iOS app" },
+        { id: 7, color: "#339df5", title: "Transfer money between accounts" }
+      ] 
+    }
   ])
 
   const [currentBoard, setCurrentBoard] = useState(null)
   const [currentItem, setCurrentItem] = useState(null)
-
-  const [theme, setTheme] = useLocalStorage("theme", true)
-  const width = useWindowResize()
 
   const dragOverHandler = (e) => {
     e.preventDefault()
@@ -77,26 +97,21 @@ const Kanban = () => {
     })
     setBoards(updatedBoards)
   }
-
-  const toggleDarkMode = () => setTheme(!theme)
-
-  const toggel = `${!(width <= 576) && theme && 'dark-mode'}`
+  
   const hendlers = [handleAddItem, dragOverHandler, dropHandler, dragLeaveHandler, dragStartHandler, dragEndHandler]
 
-return (
-  <>
-    <button onClick={() => toggleDarkMode() } className="switch-btn">Switch mode</button>
-    <div className="kanban">
+  return (
+    <KanbanContainer className="kanban">
+      <KanbanBoards>
         {boards.map((board) => (
           <Board 
             key={board.id}
-            board={board} 
-            toggel={toggel} 
+            board={board}
             hendlers={hendlers}
           />
         ))}
-    </div>
-  </>
+      </KanbanBoards>
+    </KanbanContainer>
   );
 };
 
