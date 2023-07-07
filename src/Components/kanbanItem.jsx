@@ -1,12 +1,10 @@
 import { StyledItem } from "./myStyledComponents";
-const Item = ({ item, board, index, toggel, hendlers }) => {
-    const [dragOverHandler, dropHandler, dragLeaveHandler, dragStartHandler, dragEndHandler] = hendlers
+const Item = ({ item, board, index, hendlers }) => {
+    const [dragOverHandler, dropHandler, dragStartHandler] = hendlers
     return (
       <StyledItem
         onDragOver={dragOverHandler}
-        onDragLeave={dragLeaveHandler}
         onDragStart={(e) => dragStartHandler(e, board, item)}
-        onDragEnd={dragEndHandler}
         onDrop={(e) => dropHandler(e, board)}
         draggable="true"        
         data-index={index}
@@ -14,7 +12,7 @@ const Item = ({ item, board, index, toggel, hendlers }) => {
       >
         {item.title}
       </StyledItem>
-    );
-  };
+    )
+  }
   
   export default Item;

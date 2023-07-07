@@ -61,6 +61,15 @@ const ItemInput = styled.input`
   color: #333;
 `;
 
+const ColorSelect = styled.select`
+  padding: 8px;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+  margin-right: 5px;
+  background-color: #fff;
+  color: #333;
+`;
+
 const AddItemButton = styled.button`
   padding: 8px 16px;
   background-color: #4caf50;
@@ -75,6 +84,7 @@ export {
   BoardDivider,
   AddContainer,
   ItemInput,
+  ColorSelect,
   AddItemButton,
 };
 

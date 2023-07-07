@@ -39,20 +39,11 @@ const Kanban = () => {
 
   const dragOverHandler = (e) => {
     e.preventDefault()
-    if (e.target.className === "item") e.target.style.boxShadow = "0 4px 3px gray";
   }
-
-  const dragLeaveHandler = (e) => {
-    if (e.target.className === "item") e.target.style.boxShadow = "none"
-  } 
 
   const dragStartHandler = (e, board, item) => {
     setCurrentBoard(board)
     setCurrentItem(item)
-  }
-
-  const dragEndHandler = (e) => {
-    if (e.target.className === "item") e.target.style.boxShadow = "none"
   }
 
   const dropHandler = (e, targetBoard) => {
@@ -85,8 +76,8 @@ const Kanban = () => {
     }
   }
 
-  const handleAddItem = (boardId, itemValue) => {
-    const newItem = {id: Date.now(), title: itemValue}
+  const handleAddItem = (boardId, itemValue, color) => {
+    const newItem = {id: crypto.randomUUID(), title: itemValue, color:color}
 
     const updatedBoards = boards.map((b) => {
       if (b.id === boardId) {
@@ -98,7 +89,7 @@ const Kanban = () => {
     setBoards(updatedBoards)
   }
   
-  const hendlers = [handleAddItem, dragOverHandler, dropHandler, dragLeaveHandler, dragStartHandler, dragEndHandler]
+  const hendlers = [handleAddItem, dragOverHandler, dropHandler, dragStartHandler]
 
   return (
     <KanbanContainer className="kanban">
